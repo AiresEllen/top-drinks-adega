@@ -298,7 +298,7 @@ export default function CatalogoPage() {
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 xl:grid-cols-4">
               {filteredProducts.map((product) => {
                 const finalPrice =
                   product.promotion_price !== null &&
@@ -309,9 +309,9 @@ export default function CatalogoPage() {
                 return (
                   <article
                     key={product.id}
-                    className="overflow-hidden rounded-[24px] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md"
+                    className="min-w-0 overflow-hidden rounded-[22px] bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md"
                   >
-                    <div className="relative aspect-[1/1] w-full overflow-hidden bg-slate-100">
+                    <div className="relative aspect-[6/5] w-full overflow-hidden bg-slate-100">
                       {product.image_url ? (
                         <img
                           src={product.image_url}
@@ -325,18 +325,18 @@ export default function CatalogoPage() {
                       )}
 
                       {product.badge && (
-                        <span className="absolute right-2 top-2 rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-extrabold text-amber-700 shadow-sm">
+                        <span className="absolute right-2 top-2 max-w-[70%] truncate rounded-full bg-amber-100 px-2 py-1 text-[9px] font-extrabold text-amber-700 shadow-sm sm:px-2.5 sm:text-[10px]">
                           {product.badge}
                         </span>
                       )}
                     </div>
 
-                    <div className="p-3">
-                      <h3 className="line-clamp-2 min-h-[40px] text-sm font-extrabold text-slate-950 sm:text-base">
+                    <div className="p-2.5 sm:p-3">
+                      <h3 className="line-clamp-2 min-h-[36px] text-[13px] font-extrabold text-slate-950 sm:min-h-[40px] sm:text-base">
                         {product.name}
                       </h3>
 
-                      <p className="mt-1 line-clamp-1 text-xs text-slate-500 sm:text-sm">
+                      <p className="mt-1 line-clamp-1 text-[11px] text-slate-500 sm:text-sm">
                         {product.volume || product.category || "Produto"}
                       </p>
 
@@ -348,7 +348,7 @@ export default function CatalogoPage() {
                             </p>
                           )}
 
-                        <p className="text-xl font-extrabold text-slate-950">
+                        <p className="text-base font-extrabold text-slate-950 sm:text-xl">
                           {formatCurrency(finalPrice)}
                         </p>
                       </div>
@@ -356,7 +356,7 @@ export default function CatalogoPage() {
                       <button
                         type="button"
                         onClick={() => addToCart(product)}
-                        className="mt-3 w-full rounded-2xl bg-[#020826] px-3 py-3 text-sm font-extrabold text-white transition hover:opacity-95"
+                        className="mt-3 w-full rounded-2xl bg-[#020826] px-3 py-2.5 text-xs font-extrabold text-white transition hover:opacity-95 sm:py-3 sm:text-sm"
                       >
                         Pedir
                       </button>

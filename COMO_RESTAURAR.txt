@@ -1,0 +1,13 @@
+PASSO A PASSO
+
+1. Extraia esta pasta.
+2. Abra a pasta top-drinks-adega-main no VS Code.
+3. Crie um arquivo chamado .env.local na raiz do projeto.
+4. Copie o conteúdo de .env.local.example para .env.local.
+5. Troque pelos seus dados reais do Supabase.
+6. Rode: npm install
+7. Rode: npm run dev
+
+IMPORTANTE
+- Esta versão é a base limpa restaurada do projeto.
+- Não use node_modules nem .next de versões antigas.
