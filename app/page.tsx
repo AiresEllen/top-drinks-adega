@@ -115,47 +115,51 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-100">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-rose-600 text-white shadow-md">
-              🍸
+        <div className="mx-auto w-full max-w-7xl px-3 py-3 sm:px-4 md:px-4 md:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-rose-600 text-white shadow-md sm:h-12 sm:w-12">
+                🍸
+              </div>
+
+              <div className="min-w-0">
+                <h1 className="truncate text-xl font-bold text-slate-900 sm:text-2xl">
+                  Top Drink&apos;s
+                </h1>
+                <p className="text-[11px] text-slate-500 sm:text-sm">
+                  Lounge Bar Delivery
+                </p>
+              </div>
             </div>
 
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">
-                Top Drink&apos;s
-              </h1>
-              <p className="text-sm text-slate-500">Lounge Bar Delivery</p>
-            </div>
+            <Link
+              href="/checkout"
+              className="relative shrink-0 rounded-2xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:opacity-95 md:px-5 md:py-3"
+            >
+              Carrinho
+              {cartCount > 0 && (
+                <span className="ml-2 inline-flex h-6 min-w-[24px] items-center justify-center rounded-full bg-amber-400 px-1.5 text-xs font-bold text-black">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
           </div>
 
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="mt-3 flex items-center justify-center gap-6 border-t border-slate-200 pt-2 md:mt-4">
             <Link
               href="/"
-              className="font-medium text-slate-700 hover:text-slate-900"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900"
             >
               Início
             </Link>
 
             <Link
               href="/catalogo"
-              className="font-medium text-slate-700 hover:text-slate-900"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900"
             >
               Catálogo
             </Link>
           </nav>
-
-          <Link
-            href="/checkout"
-            className="relative rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white shadow-md transition hover:opacity-95"
-          >
-            Carrinho
-            {cartCount > 0 && (
-              <span className="ml-2 inline-flex h-6 min-w-[24px] items-center justify-center rounded-full bg-amber-400 px-1.5 text-xs font-bold text-black">
-                {cartCount}
-              </span>
-            )}
-          </Link>
         </div>
       </header>
 
@@ -229,13 +233,13 @@ export default function HomePage() {
               Nenhuma promoção cadastrada ainda.
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
               {promotionProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="min-w-0 overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                  className="overflow-hidden rounded-[26px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                 >
-                  <div className="aspect-[6/5] w-full bg-slate-100">
+                  <div className="aspect-[5/4] w-full bg-slate-100">
                     {product.image_url ? (
                       <img
                         src={product.image_url}
@@ -249,20 +253,20 @@ export default function HomePage() {
                     )}
                   </div>
 
-                  <div className="p-2.5 sm:p-3">
+                  <div className="p-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h3 className="line-clamp-2 text-sm font-bold text-slate-900 sm:text-base">
+                        <h3 className="line-clamp-2 text-base font-bold text-slate-900">
                           {product.name}
                         </h3>
 
-                        <p className="mt-1 line-clamp-1 text-[11px] text-slate-500 sm:text-xs">
+                        <p className="mt-1 text-xs text-slate-500">
                           {product.category || "Sem categoria"}
                           {product.volume ? ` • ${product.volume}` : ""}
                         </p>
                       </div>
 
-                      <span className="shrink-0 rounded-full bg-rose-100 px-1.5 py-1 text-[9px] font-bold text-rose-700 sm:px-2 sm:text-[10px]">
+                      <span className="rounded-full bg-rose-100 px-2 py-1 text-[10px] font-bold text-rose-700">
                         Oferta
                       </span>
                     </div>
@@ -272,14 +276,14 @@ export default function HomePage() {
                         R$ {Number(product.price).toFixed(2)}
                       </p>
 
-                      <p className="text-base font-bold text-rose-600 sm:text-xl">
+                      <p className="text-xl font-bold text-rose-600">
                         R$ {Number(product.promotion_price).toFixed(2)}
                       </p>
                     </div>
 
                     <Link
                       href="/catalogo"
-                      className="mt-3 block rounded-2xl bg-rose-600 px-3 py-2 text-center text-xs font-semibold text-white transition hover:opacity-95 sm:px-4 sm:py-2.5 sm:text-sm"
+                      className="mt-3 block rounded-2xl bg-rose-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:opacity-95"
                     >
                       Aproveitar promoção
                     </Link>
@@ -307,7 +311,7 @@ export default function HomePage() {
               Nenhuma categoria cadastrada ainda.
             </div>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-2 xl:grid-cols-3">
               {categories.map((category) => (
                 <Link
                   key={category}
@@ -353,7 +357,7 @@ export default function HomePage() {
               Nenhum produto marcado como destaque ainda.
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
               {featuredProducts.map((product) => {
                 const finalPrice =
                   product.promotion_price !== null
@@ -363,9 +367,9 @@ export default function HomePage() {
                 return (
                   <div
                     key={product.id}
-                    className="min-w-0 overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                    className="overflow-hidden rounded-[26px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                   >
-                    <div className="aspect-[6/5] w-full bg-slate-100">
+                    <div className="aspect-[5/4] w-full bg-slate-100">
                       {product.image_url ? (
                         <img
                           src={product.image_url}
@@ -379,20 +383,20 @@ export default function HomePage() {
                       )}
                     </div>
 
-                    <div className="p-2.5 sm:p-3">
+                    <div className="p-3">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <h3 className="line-clamp-2 text-sm font-bold text-slate-900 sm:text-base">
+                          <h3 className="line-clamp-2 text-base font-bold text-slate-900">
                             {product.name}
                           </h3>
 
-                          <p className="mt-1 line-clamp-1 text-[11px] text-slate-500 sm:text-xs">
+                          <p className="mt-1 text-xs text-slate-500">
                             {product.category || "Sem categoria"}
                             {product.volume ? ` • ${product.volume}` : ""}
                           </p>
                         </div>
 
-                        <span className="shrink-0 rounded-full bg-amber-100 px-1.5 py-1 text-[9px] font-bold text-amber-700 sm:px-2 sm:text-[10px]">
+                        <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-bold text-amber-700">
                           Destaque
                         </span>
                       </div>
@@ -404,14 +408,14 @@ export default function HomePage() {
                           </p>
                         )}
 
-                        <p className="text-base font-bold text-slate-950 sm:text-xl">
+                        <p className="text-xl font-bold text-slate-950">
                           R$ {Number(finalPrice).toFixed(2)}
                         </p>
                       </div>
 
                       <Link
                         href="/catalogo"
-                        className="mt-3 block rounded-2xl bg-slate-950 px-3 py-2 text-center text-xs font-semibold text-white transition hover:opacity-95 sm:px-4 sm:py-2.5 sm:text-sm"
+                        className="mt-3 block rounded-2xl bg-slate-950 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:opacity-95"
                       >
                         Ver no catálogo
                       </Link>
