@@ -24,6 +24,7 @@ function AdminTabs() {
     { href: "/admin", label: "Painel" },
     { href: "/admin/produtos", label: "Produtos" },
     { href: "/admin/pedidos", label: "Pedidos" },
+    { href: "/admin/pedidos/arquivados", label: "Arquivados" }, // 🔥 NOVO
     { href: "/admin/promocoes", label: "Promoções" },
   ];
 
@@ -82,13 +83,19 @@ export default function AdminPage() {
 
       const active = (products || []).filter((p) => p.is_active).length;
       const low = (products || []).filter((p) => Number(p.stock) <= 5);
-      const pending = (orders || []).filter(
+
+      // 🔥 NÃO CONSIDERA ARQUIVADOS
+      const activeOrders = (orders || []).filter(
+        (o) => (o.status || "").toLowerCase() !== "arquivado",
+      );
+
+      const pending = activeOrders.filter(
         (o) => o.status !== "entregue",
       ).length;
 
       setActiveProducts(active);
       setLowStock(low);
-      setOrderCount((orders || []).length);
+      setOrderCount(activeOrders.length);
       setPendingCount(pending);
       setLoading(false);
     }
@@ -215,6 +222,14 @@ export default function AdminPage() {
                 className="rounded-2xl bg-rose-600 px-5 py-3 text-left font-semibold text-white"
               >
                 Ver pedidos
+              </Link>
+
+              {/* 🔥 NOVO BOTÃO */}
+              <Link
+                href="/admin/pedidos/arquivados"
+                className="rounded-2xl bg-slate-700 px-5 py-3 text-left font-semibold text-white"
+              >
+                Pedidos arquivados
               </Link>
 
               <Link

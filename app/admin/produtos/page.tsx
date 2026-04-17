@@ -55,6 +55,18 @@ const initialForm: FormState = {
   display_order: "0",
 };
 
+const CATEGORY_SUGGESTIONS = [
+  "Cervejas",
+  "Whiskies",
+  "Vodkas",
+  "Gins",
+  "Energéticos",
+  "Refrigerantes",
+  "Combos",
+  "Destilados",
+  "Garrafas",
+];
+
 function slugify(text: string) {
   return text
     .toLowerCase()
@@ -285,18 +297,17 @@ export default function ProdutosPage() {
   }
 
   const categories = useMemo(() => {
-    const list = Array.from(
-      new Set(
-        products
-          .map((product) => product.category)
-          .filter(
-            (category): category is string =>
-              !!category && category.trim() !== "",
-          ),
-      ),
+    const fromProducts = products
+      .map((product) => product.category)
+      .filter(
+        (category): category is string => !!category && category.trim() !== "",
+      );
+
+    const merged = Array.from(
+      new Set([...CATEGORY_SUGGESTIONS, ...fromProducts]),
     );
 
-    return list.sort((a, b) => a.localeCompare(b));
+    return merged.sort((a, b) => a.localeCompare(b));
   }, [products]);
 
   const filteredProducts = useMemo(() => {
@@ -379,7 +390,7 @@ export default function ProdutosPage() {
         <div className="grid gap-6 xl:grid-cols-[400px_1fr]">
           <form
             onSubmit={handleSubmit}
-            className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm space-y-4"
+            className="space-y-4 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm"
           >
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-slate-900">
@@ -427,11 +438,21 @@ export default function ProdutosPage() {
               </label>
               <input
                 name="category"
-                placeholder="Ex.: Cervejas, Vodka, Refrigerantes"
+                list="categories-list"
+                placeholder="Ex.: Garrafas"
                 value={form.category}
                 onChange={handleChange}
                 className="w-full rounded-2xl border border-slate-200 p-3 outline-none focus:border-slate-400"
               />
+              <datalist id="categories-list">
+                {categories.map((category) => (
+                  <option key={category} value={category} />
+                ))}
+              </datalist>
+              <p className="mt-2 text-xs text-slate-500">
+                Use sempre o mesmo nome da categoria. Para essa nova seção, use
+                exatamente: <strong>Garrafas</strong>.
+              </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
