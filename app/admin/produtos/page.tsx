@@ -55,7 +55,7 @@ const initialForm: FormState = {
   display_order: "0",
 };
 
-const CATEGORY_SUGGESTIONS = [
+const CATEGORY_OPTIONS = [
   "Cervejas",
   "Whiskies",
   "Vodkas",
@@ -82,6 +82,34 @@ function formatCurrency(value?: number | null) {
     style: "currency",
     currency: "BRL",
   });
+}
+
+function getStockStatus(stock: number) {
+  if (stock <= 0) {
+    return {
+      label: "Sem estoque",
+      classes: "bg-rose-100 text-rose-700",
+    };
+  }
+
+  if (stock <= 3) {
+    return {
+      label: "Estoque crítico",
+      classes: "bg-rose-100 text-rose-700",
+    };
+  }
+
+  if (stock <= 8) {
+    return {
+      label: "Estoque baixo",
+      classes: "bg-amber-100 text-amber-700",
+    };
+  }
+
+  return {
+    label: "Estoque ok",
+    classes: "bg-emerald-100 text-emerald-700",
+  };
 }
 
 export default function ProdutosPage() {
@@ -112,7 +140,9 @@ export default function ProdutosPage() {
   }, []);
 
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -206,6 +236,7 @@ export default function ProdutosPage() {
         ? "Produto atualizado com sucesso!"
         : "Produto criado com sucesso!",
     );
+
     resetForm();
     fetchProducts();
   }
@@ -297,17 +328,15 @@ export default function ProdutosPage() {
   }
 
   const categories = useMemo(() => {
-    const fromProducts = products
+    const dynamicCategories = products
       .map((product) => product.category)
       .filter(
         (category): category is string => !!category && category.trim() !== "",
       );
 
-    const merged = Array.from(
-      new Set([...CATEGORY_SUGGESTIONS, ...fromProducts]),
-    );
-
-    return merged.sort((a, b) => a.localeCompare(b));
+    return Array.from(
+      new Set([...CATEGORY_OPTIONS, ...dynamicCategories]),
+    ).sort((a, b) => a.localeCompare(b));
   }, [products]);
 
   const filteredProducts = useMemo(() => {
@@ -329,6 +358,21 @@ export default function ProdutosPage() {
       return matchesSearch && matchesCategory;
     });
   }, [products, search, categoryFilter]);
+
+  const stats = useMemo(() => {
+    const active = products.filter((p) => p.active).length;
+    const featured = products.filter((p) => p.featured).length;
+    const lowStock = products.filter((p) => p.stock > 0 && p.stock <= 8).length;
+    const outOfStock = products.filter((p) => p.stock <= 0).length;
+
+    return {
+      total: products.length,
+      active,
+      featured,
+      lowStock,
+      outOfStock,
+    };
+  }, [products]);
 
   return (
     <div className="min-h-screen bg-neutral-100 p-4 md:p-8">
@@ -370,6 +414,13 @@ export default function ProdutosPage() {
                 </Link>
 
                 <Link
+                  href="/admin/pedidos/arquivados"
+                  className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20"
+                >
+                  Arquivados
+                </Link>
+
+                <Link
                   href="/admin/promocoes"
                   className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20"
                 >
@@ -387,7 +438,37 @@ export default function ProdutosPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[400px_1fr]">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-2xl bg-white p-5 shadow-sm">
+            <div className="text-sm text-slate-500">Total de produtos</div>
+            <div className="mt-2 text-3xl font-black text-slate-900">
+              {stats.total}
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-white p-5 shadow-sm">
+            <div className="text-sm text-slate-500">Ativos no site</div>
+            <div className="mt-2 text-3xl font-black text-emerald-700">
+              {stats.active}
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-white p-5 shadow-sm">
+            <div className="text-sm text-slate-500">Com destaque</div>
+            <div className="mt-2 text-3xl font-black text-amber-600">
+              {stats.featured}
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-white p-5 shadow-sm">
+            <div className="text-sm text-slate-500">Baixo / sem estoque</div>
+            <div className="mt-2 text-3xl font-black text-rose-600">
+              {stats.lowStock + stats.outOfStock}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
           <form
             onSubmit={handleSubmit}
             className="space-y-4 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm"
@@ -436,22 +517,22 @@ export default function ProdutosPage() {
               <label className="mb-2 block text-sm font-semibold text-slate-800">
                 Categoria
               </label>
-              <input
+              <select
                 name="category"
-                list="categories-list"
-                placeholder="Ex.: Garrafas"
                 value={form.category}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-slate-200 p-3 outline-none focus:border-slate-400"
-              />
-              <datalist id="categories-list">
-                {categories.map((category) => (
-                  <option key={category} value={category} />
+                className="w-full rounded-2xl border border-slate-200 bg-white p-3 outline-none focus:border-slate-400"
+                required
+              >
+                <option value="">Selecione uma categoria</option>
+                {CATEGORY_OPTIONS.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
                 ))}
-              </datalist>
+              </select>
               <p className="mt-2 text-xs text-slate-500">
-                Use sempre o mesmo nome da categoria. Para essa nova seção, use
-                exatamente: <strong>Garrafas</strong>.
+                Para a nova seção, escolha <strong>Garrafas</strong>.
               </p>
             </div>
 
@@ -583,7 +664,7 @@ export default function ProdutosPage() {
                 <img
                   src={form.image_url}
                   alt="Prévia"
-                  className="mt-3 h-24 w-24 rounded-2xl border object-cover"
+                  className="mt-3 h-28 w-28 rounded-2xl border object-cover"
                 />
               )}
             </div>
@@ -628,7 +709,7 @@ export default function ProdutosPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white transition hover:opacity-95"
+                className="rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white transition hover:opacity-95 disabled:opacity-60"
               >
                 {loading
                   ? "Salvando..."
@@ -682,130 +763,144 @@ export default function ProdutosPage() {
               </div>
             </div>
 
-            <div className="space-y-3">
-              {filteredProducts.map((product) => (
-                <div
-                  key={product.id}
-                  className="rounded-[26px] border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100/70"
-                >
-                  <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                    <div className="flex gap-4">
-                      <div className="h-16 w-16 overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                        {product.image_url ? (
-                          <img
-                            src={product.image_url}
-                            alt={product.name}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">
-                            sem img
-                          </div>
-                        )}
+            <div className="space-y-4">
+              {filteredProducts.map((product) => {
+                const stockInfo = getStockStatus(product.stock);
+
+                return (
+                  <div
+                    key={product.id}
+                    className="rounded-[26px] border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100/70"
+                  >
+                    <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                      <div className="flex gap-4">
+                        <div className="h-20 w-20 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                          {product.image_url ? (
+                            <img
+                              src={product.image_url}
+                              alt={product.name}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">
+                              sem img
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="space-y-1">
+                          <h3 className="text-xl font-bold text-slate-900">
+                            {product.name}
+                          </h3>
+
+                          <p className="text-sm text-slate-500">
+                            Slug: {product.slug}
+                          </p>
+
+                          <p className="text-sm text-slate-500">
+                            Categoria: {product.category || "Sem categoria"}
+                          </p>
+
+                          <p className="text-sm text-slate-700">
+                            Preço: {formatCurrency(product.price)}
+                            {product.promotion_price
+                              ? ` • Promo: ${formatCurrency(product.promotion_price)}`
+                              : ""}
+                            {product.volume ? ` • ${product.volume}` : ""}
+                          </p>
+
+                          <p className="text-sm text-slate-700">
+                            Estoque atual:{" "}
+                            <span className="font-bold">{product.stock}</span>
+                          </p>
+                        </div>
                       </div>
 
-                      <div>
-                        <h3 className="text-xl font-bold text-slate-900">
-                          {product.name}
-                        </h3>
+                      <div className="flex flex-wrap gap-2 xl:max-w-[340px] xl:justify-end">
+                        <button
+                          type="button"
+                          onClick={() => handleEdit(product)}
+                          className="rounded-2xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white"
+                        >
+                          Editar
+                        </button>
 
-                        <p className="text-sm text-slate-500">
-                          Slug: {product.slug}
-                        </p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleToggleFeatured(product.id, product.featured)
+                          }
+                          className={`rounded-2xl px-4 py-2.5 text-sm font-semibold text-white ${
+                            product.featured ? "bg-amber-500" : "bg-slate-600"
+                          }`}
+                        >
+                          {product.featured ? "Tirar destaque" : "Destacar"}
+                        </button>
 
-                        <p className="text-sm text-slate-500">
-                          Categoria: {product.category || "Sem categoria"}
-                        </p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleToggleActive(product.id, product.active)
+                          }
+                          className={`rounded-2xl px-4 py-2.5 text-sm font-semibold text-white ${
+                            product.active ? "bg-emerald-600" : "bg-slate-500"
+                          }`}
+                        >
+                          {product.active ? "Desativar" : "Ativar"}
+                        </button>
 
-                        <p className="text-sm text-slate-700">
-                          Preço: {formatCurrency(product.price)}
-                          {product.promotion_price
-                            ? ` • Promo: ${formatCurrency(product.promotion_price)}`
-                            : ""}
-                          {product.volume ? ` • ${product.volume}` : ""}
-                          {" • "}Estoque: {product.stock}
-                        </p>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(product.id)}
+                          className="rounded-2xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white"
+                        >
+                          Excluir
+                        </button>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleEdit(product)}
-                        className="rounded-2xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white"
-                      >
-                        Editar
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleToggleFeatured(product.id, product.featured)
-                        }
-                        className={`rounded-2xl px-4 py-2.5 text-sm font-semibold text-white ${
-                          product.featured ? "bg-amber-500" : "bg-slate-600"
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                          product.active
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-rose-100 text-rose-700"
                         }`}
                       >
-                        {product.featured ? "Tirar destaque" : "Destacar"}
-                      </button>
+                        {product.active ? "Ativo" : "Inativo"}
+                      </span>
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleToggleActive(product.id, product.active)
-                        }
-                        className={`rounded-2xl px-4 py-2.5 text-sm font-semibold text-white ${
-                          product.active ? "bg-emerald-600" : "bg-slate-500"
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                          product.featured
+                            ? "bg-amber-100 text-amber-700"
+                            : "bg-slate-200 text-slate-700"
                         }`}
                       >
-                        {product.active ? "Desativar" : "Ativar"}
-                      </button>
+                        {product.featured ? "Mais vendido" : "Normal"}
+                      </span>
 
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(product.id)}
-                        className="rounded-2xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white"
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${stockInfo.classes}`}
                       >
-                        Excluir
-                      </button>
+                        {stockInfo.label}
+                      </span>
+
+                      {product.promotion_price && (
+                        <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+                          Promoção ativa
+                        </span>
+                      )}
+
+                      {product.badge && (
+                        <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+                          {product.badge}
+                        </span>
+                      )}
                     </div>
                   </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        product.active
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-rose-100 text-rose-700"
-                      }`}
-                    >
-                      {product.active ? "Ativo" : "Inativo"}
-                    </span>
-
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        product.featured
-                          ? "bg-amber-100 text-amber-700"
-                          : "bg-slate-200 text-slate-700"
-                      }`}
-                    >
-                      {product.featured ? "Mais vendido" : "Normal"}
-                    </span>
-
-                    {product.badge && (
-                      <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
-                        {product.badge}
-                      </span>
-                    )}
-
-                    {product.stock <= 3 && (
-                      <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
-                        Estoque baixo
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
 
               {filteredProducts.length === 0 && (
                 <div className="rounded-3xl border border-dashed border-slate-300 p-8 text-center text-slate-500">
