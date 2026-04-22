@@ -151,7 +151,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-100">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto w-full max-w-7xl px-3 py-3 sm:px-4 md:px-4 md:py-4">
+        <div className="w-full px-3 py-3 sm:px-4 md:px-4 md:py-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-rose-600 text-white shadow-md sm:h-12 sm:w-12">
@@ -199,9 +199,9 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="w-full px-4 py-6 sm:px-5 md:px-6">
         <section className="overflow-hidden rounded-[32px] bg-[#06070b] shadow-xl">
-          <div className="grid min-h-[410px] items-center gap-8 px-6 py-8 md:grid-cols-2 md:px-10 md:py-10 lg:min-h-[460px]">
+          <div className="grid min-h-[360px] items-center gap-6 px-6 py-8 md:grid-cols-2 md:px-8 md:py-8 lg:min-h-[400px]">
             <div className="relative z-10">
               <span className="inline-block rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur">
                 Delivery Premium
@@ -211,7 +211,7 @@ export default function HomePage() {
                 {banner.title}
               </h2>
 
-              <p className="mt-4 max-w-xl text-sm text-white/85 md:text-xl">
+              <p className="mt-4 max-w-xl text-sm text-white/85 md:text-lg">
                 {banner.subtitle}
               </p>
 
@@ -232,13 +232,13 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative flex min-h-[260px] items-center justify-center">
+            <div className="relative flex min-h-[240px] items-center justify-center">
               <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-rose-500/10 via-transparent to-amber-400/10 blur-2xl" />
 
               <img
                 src={banner.image_url || "/patroas-do-gole.jpeg.jpeg"}
                 alt="Banner principal"
-                className="relative z-10 max-h-[360px] w-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.45)] md:max-h-[420px]"
+                className="relative z-10 max-h-[300px] w-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.45)] md:max-h-[340px]"
               />
             </div>
           </div>
@@ -274,7 +274,7 @@ export default function HomePage() {
               {promotionProducts.map((product) => (
                 <div
                   key={product.slug}
-                  className="overflow-hidden rounded-[26px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                  className="overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <div className="aspect-[5/4] w-full bg-slate-100">
                     {product.image_url ? (
@@ -353,7 +353,7 @@ export default function HomePage() {
                 <Link
                   key={category}
                   href={`/catalogo?categoria=${encodeURIComponent(category)}`}
-                  className="rounded-[26px] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                  className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-rose-500">
                     Categoria
@@ -404,7 +404,7 @@ export default function HomePage() {
                 return (
                   <div
                     key={product.slug}
-                    className="overflow-hidden rounded-[26px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                    className="overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <div className="aspect-[5/4] w-full bg-slate-100">
                       {product.image_url ? (
