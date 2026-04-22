@@ -60,10 +60,11 @@ const CATEGORY_OPTIONS = [
   "Whiskies",
   "Vodkas",
   "Gins",
+  "Vinhos",
+  "Destilados",
   "Energéticos",
   "Refrigerantes",
   "Combos",
-  "Destilados",
   "Garrafas",
 ];
 

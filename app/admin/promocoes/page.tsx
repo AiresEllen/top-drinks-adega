@@ -202,11 +202,11 @@ export default function PromocoesPage() {
             return (
               <div
                 key={product.id}
-                className="rounded-[26px] border border-slate-200 bg-white p-4 shadow-sm"
+                className="rounded-[22px] border border-slate-200 bg-white p-3 shadow-sm"
               >
-                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                  <div className="flex gap-4">
-                    <div className="h-16 w-16 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+                  <div className="flex gap-3">
+                    <div className="h-14 w-14 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
                       {product.image_url ? (
                         <img
                           src={product.image_url}
@@ -214,7 +214,7 @@ export default function PromocoesPage() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">
+                        <div className="flex h-full w-full items-center justify-center text-[10px] text-slate-400">
                           sem img
                         </div>
                       )}
@@ -222,23 +222,23 @@ export default function PromocoesPage() {
 
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-xl font-bold text-slate-900">
+                        <h3 className="text-lg font-bold text-slate-900">
                           {product.name}
                         </h3>
 
                         {hasPromotion && (
-                          <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
+                          <span className="rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-semibold text-rose-700">
                             Em promoção
                           </span>
                         )}
                       </div>
 
-                      <p className="mt-1 text-sm text-slate-500">
+                      <p className="mt-1 text-xs text-slate-500">
                         {product.category || "Sem categoria"}
                         {product.volume ? ` • ${product.volume}` : ""}
                       </p>
 
-                      <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
+                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs sm:text-sm">
                         <span className="font-semibold text-slate-900">
                           Preço normal: {formatCurrency(product.price)}
                         </span>
@@ -263,7 +263,7 @@ export default function PromocoesPage() {
                           [product.id]: e.target.value,
                         }))
                       }
-                      className="w-40 rounded-2xl border border-slate-200 p-3 outline-none focus:border-slate-400"
+                      className="w-32 rounded-xl border border-slate-200 p-2.5 text-sm outline-none focus:border-slate-400"
                       placeholder="Preço promo"
                     />
 
@@ -278,7 +278,7 @@ export default function PromocoesPage() {
                             : null,
                         )
                       }
-                      className="rounded-2xl bg-green-600 px-4 py-3 text-sm font-semibold text-white transition hover:opacity-95"
+                      className="rounded-xl bg-green-600 px-3 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 sm:text-sm"
                     >
                       Salvar
                     </button>
@@ -286,13 +286,13 @@ export default function PromocoesPage() {
                     <button
                       type="button"
                       onClick={() => updatePromotion(product.id, null)}
-                      className="rounded-2xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:opacity-95"
+                      className="rounded-xl bg-rose-600 px-3 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 sm:text-sm"
                     >
                       Remover
                     </button>
 
                     {savingId === product.id && (
-                      <span className="text-sm text-slate-500">
+                      <span className="text-xs text-slate-500 sm:text-sm">
                         salvando...
                       </span>
                     )}
