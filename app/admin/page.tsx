@@ -5,8 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "../lib/supabase";
 
-const ADMIN_EMAIL = "melxluki34@gmail.com";
-
 type Product = {
   id: string;
   name: string;
@@ -116,18 +114,9 @@ export default function AdminPage() {
     async function loadPage() {
       const {
         data: { user },
-        error: userError,
       } = await supabase.auth.getUser();
 
-      if (userError || !user) {
-        router.replace("/login");
-        return;
-      }
-
-      const userEmail = user.email?.toLowerCase().trim();
-
-      if (userEmail !== ADMIN_EMAIL.toLowerCase()) {
-        await supabase.auth.signOut();
+      if (!user) {
         router.replace("/login");
         return;
       }
