@@ -208,7 +208,7 @@ export default function CatalogoPage() {
   return (
     <div className="min-h-screen bg-[#f4f5f7] text-slate-900">
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-3 sm:px-4 md:px-6">
+        <div className="flex w-full items-center justify-between gap-3 px-3 py-3 sm:px-4 md:px-6">
           <div className="flex items-center gap-3">
             <Link
               href="/"
@@ -242,7 +242,7 @@ export default function CatalogoPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-3 py-4 sm:px-4 md:px-6">
+      <main className="w-full px-4 py-6 sm:px-5 md:px-6">
         <section className="mb-4 rounded-[28px] bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5">
           <div className="flex flex-col gap-3">
             <input
