@@ -283,7 +283,7 @@ ${paymentText}
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="w-full px-4 py-6 sm:px-5 md:px-6">
         {feedback.message && (
           <div
             className={`mb-6 rounded-2xl border px-4 py-4 text-sm font-medium shadow-sm ${
