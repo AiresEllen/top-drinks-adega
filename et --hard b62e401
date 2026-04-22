@@ -1,0 +1,17 @@
+[33mdec1939[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m ajusta visualizacao painel
+[33m4efa480[m ajustes catalogo volta
+[33madeba1b[m ajustes home
+[33m8d14b1e[m ajustes visuais da home
+[33m2e4d9cb[m fix: layout painel admin
+[33m11d6357[m Ajusta responsividade da home
+[33m26a1283[m fix: melhora layout catalogo
+[33mae40e36[m Ajusta categorias do painel
+[33mcee6b2c[m[33m ([m[1;31morigin/volta-b62e401[m[33m, [m[1;32mvolta-b62e401[m[33m)[m Atualiza painel e banner editavel
+[33m012e020[m Melhora layout do catalogo com cards menores
+[33m73d87aa[m Pedidos arquivados + limpeza 30 dias + melhorias painel
+[33m3dd76df[m Ajuste final da home mobile com duas colunas
+[33ma546631[m Ajuste de responsividade e cards mobile
+[33mb62e401[m feat: catalogo responsivo estilo app
+[33me936b08[m fix: instalar zustand
+[33m2966825[m fix: instalar lucide-react
+[33m24568a0[m projeto adega pronto
