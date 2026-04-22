@@ -58,16 +58,17 @@ const initialForm: FormState = {
 const CATEGORY_OPTIONS = [
   "Cervejas",
   "Whiskies",
-  "Vodkas",
-  "Gins",
+  "Vodka",
+  "Gin",
   "Vinhos",
   "Destilados",
+  "Cachaças",
+  "Tequila",
+  "Licores",
   "Energéticos",
   "Refrigerantes",
   "Combos",
-  "Garrafas",
 ];
-
 function slugify(text: string) {
   return text
     .toLowerCase()
