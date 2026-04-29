@@ -57,6 +57,7 @@ const initialForm: FormState = {
 
 const CATEGORY_OPTIONS = [
   "Cervejas",
+  "Caixas",
   "Whiskies",
   "Vodka",
   "Gin",

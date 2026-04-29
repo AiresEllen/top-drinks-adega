@@ -65,13 +65,11 @@ export default function CheckoutPage() {
 
   function decreaseQuantity(id: string) {
     updateCart(
-      cartItems
-        .map((item) =>
-          item.id === id
-            ? { ...item, quantity: Math.max(1, item.quantity - 1) }
-            : item,
-        )
-        .filter((item) => item.quantity > 0),
+      cartItems.map((item) =>
+        item.id === id
+          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
+          : item,
+      ),
     );
   }
 
@@ -113,18 +111,12 @@ export default function CheckoutPage() {
     setFeedback({ type: "", message: "" });
 
     if (cartItems.length === 0) {
-      setFeedback({
-        type: "error",
-        message: "Seu carrinho está vazio.",
-      });
+      setFeedback({ type: "error", message: "Seu carrinho está vazio." });
       return;
     }
 
     if (!customerName.trim()) {
-      setFeedback({
-        type: "error",
-        message: "Preencha o nome do cliente.",
-      });
+      setFeedback({ type: "error", message: "Preencha o nome do cliente." });
       return;
     }
 
@@ -137,22 +129,18 @@ export default function CheckoutPage() {
     }
 
     if (!street.trim()) {
-      setFeedback({
-        type: "error",
-        message: "Preencha a rua.",
-      });
+      setFeedback({ type: "error", message: "Preencha a rua." });
       return;
     }
 
     if (!neighborhood.trim()) {
-      setFeedback({
-        type: "error",
-        message: "Preencha o bairro.",
-      });
+      setFeedback({ type: "error", message: "Preencha o bairro." });
       return;
     }
 
-    const fullAddress = `${street}${number ? `, ${number}` : ""}${neighborhood ? ` - ${neighborhood}` : ""}`;
+    const fullAddress = `${street}${number ? `, ${number}` : ""}${
+      neighborhood ? ` - ${neighborhood}` : ""
+    }`;
 
     const normalizedItems = cartItems.map((item) => {
       const finalPrice =
@@ -171,22 +159,22 @@ export default function CheckoutPage() {
       };
     });
 
+    const orderId = crypto.randomUUID();
+    const orderCode = orderId.slice(0, 8);
+
     setSubmitting(true);
 
-    const { data, error } = await supabase
-      .from("orders")
-      .insert({
-        customer_name: customerName,
-        customer_phone: phone,
-        customer_address: fullAddress,
-        payment_method: paymentMethod,
-        notes: notes || null,
-        items: normalizedItems,
-        total: total,
-        status: "pendente",
-      })
-      .select()
-      .single();
+    const { error } = await supabase.from("orders").insert({
+      id: orderId,
+      customer_name: customerName,
+      customer_phone: phone,
+      customer_address: fullAddress,
+      payment_method: paymentMethod,
+      notes: notes || null,
+      items: normalizedItems,
+      total,
+      status: "pendente",
+    });
 
     setSubmitting(false);
 
@@ -199,12 +187,12 @@ export default function CheckoutPage() {
       return;
     }
 
-    const orderCode = String(data.id).slice(0, 8);
-
     const orderItemsText = normalizedItems
       .map(
         (item) =>
-          `• ${item.name}${item.volume ? ` (${item.volume})` : ""} x${item.quantity} - ${formatCurrency(item.total_price)}`,
+          `• ${item.name}${item.volume ? ` (${item.volume})` : ""} x${
+            item.quantity
+          } - ${formatCurrency(item.total_price)}`,
       )
       .join("\n");
 
@@ -245,7 +233,9 @@ ${paymentText}
 `;
 
     const storePhone = "5511959048246";
-    const whatsappLink = `https://wa.me/${storePhone}?text=${encodeURIComponent(message)}`;
+    const whatsappLink = `https://wa.me/${storePhone}?text=${encodeURIComponent(
+      message,
+    )}`;
 
     clearCheckoutAfterSuccess();
 
