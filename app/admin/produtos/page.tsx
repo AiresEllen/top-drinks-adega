@@ -534,9 +534,6 @@ export default function ProdutosPage() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-slate-500">
-                Para a nova seção, escolha <strong>Garrafas</strong>.
-              </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
